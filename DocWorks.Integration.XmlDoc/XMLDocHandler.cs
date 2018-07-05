@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using DocWorks.Integration.XmlDoc.Extensions;
-using ISymbolExtensions = DocWorks.Integration.XmlDoc.Extensions.ISymbolExtensions;
 
 namespace DocWorks.Integration.XmlDoc
 {
@@ -45,7 +44,7 @@ namespace DocWorks.Integration.XmlDoc
             if (!Directory.Exists(compilationParametersRootPath))
                 throw new ArgumentException($"Directory \"{compilationParametersRootPath}\" does not exist.");
 
-            var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp6, DocumentationMode.Parse, SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
+            var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp7_2, DocumentationMode.Parse, SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
             
             var filePaths = Directory.GetFiles(compilationParametersRootPath, "*.cs", SearchOption.AllDirectories)
                 .Select(Path.GetFullPath)
@@ -76,7 +75,6 @@ namespace DocWorks.Integration.XmlDoc
         {
             Dictionary<string, SyntaxTree> treesForPaths = new Dictionary<string, SyntaxTree>();
             var compilation = ParseAndCompile(treesForPaths);
-            var diagnostics = compilation.GetDiagnostics();
 
             var fullPaths = paths.Select(p => Path.GetFullPath(Path.Combine(compilationParameters.RootPath, p)));
 
@@ -103,7 +101,7 @@ namespace DocWorks.Integration.XmlDoc
 
 
                         string xmlAttributes = "";
-                        var baseType = BaseType(typeSymbol);
+                        var baseType = BaseType(typeSymbol).XMLEncoded();
                         if (!string.IsNullOrEmpty(baseType))
                             xmlAttributes = $@" inherits=""{baseType}""";
                         if (typeSymbol.IsStatic)
@@ -139,7 +137,7 @@ namespace DocWorks.Integration.XmlDoc
                         foreach (var member in members)
                         {
                             string methodAttributes = "";
-                            var memberName = ISymbolExtensions.MemberName(member);
+                            var memberName = member.MemberName();
 
                             int typeParameterCount = 0;
                             if (member.Kind == SymbolKind.Method)
@@ -203,11 +201,9 @@ namespace DocWorks.Integration.XmlDoc
 
         private CSharpCompilation ParseAndCompile(Dictionary<string, SyntaxTree> treesForPaths)
         {
-            var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp6, DocumentationMode.Parse,
-                SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
+            var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp7_2, DocumentationMode.Parse, SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
+            var csFilePaths = Directory.GetFiles(compilationParameters.RootPath, "*.cs", SearchOption.AllDirectories).Select(Path.GetFullPath);
 
-            var csFilePaths = Directory.GetFiles(compilationParameters.RootPath, "*.cs", SearchOption.AllDirectories)
-                .Select(Path.GetFullPath);
             var syntaxTrees = csFilePaths.Select(
                 p =>
                 {
@@ -218,8 +214,7 @@ namespace DocWorks.Integration.XmlDoc
 
             var compilerOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
             compilerOptions = compilerOptions.WithAllowUnsafe(true);
-            var compilation = CSharpCompilation.Create("Test", syntaxTrees, GetMetadataReferences(), compilerOptions);
-            return compilation;
+            return CSharpCompilation.Create("Test", syntaxTrees, GetMetadataReferences(), compilerOptions) ?? throw new ArgumentNullException("CSharpCompilation.Create(\"Test\", syntaxTrees, GetMetadataReferences(), compilerOptions)");
         }
 
         private static string AttributesXml(ISymbol typeSymbol)
@@ -257,7 +252,7 @@ namespace DocWorks.Integration.XmlDoc
                     sb.AppendLine("<constructorArguments>");
                     foreach (var argument in constructorArguments)
                     {
-                        sb.AppendLine($@"<argument value=""{argument.ToCSharpStringNoStringQuotes()}"">");
+                        sb.AppendLine($@"<argument value=""{argument.ToCSharpXMLEncodedString()}"">");
                         sb.AppendLine(TypeReferenceXml(argument.Type));
                         sb.AppendLine("</argument>");
                     }
@@ -269,7 +264,7 @@ namespace DocWorks.Integration.XmlDoc
                     sb.AppendLine("<namedArguments>");
                     foreach (var argument in namedArguments)
                     {
-                        sb.AppendLine($@"<argument name=""{argument.Key}"" value=""{argument.Value.ToCSharpStringNoStringQuotes()}"">");
+                        sb.AppendLine($@"<argument name=""{argument.Key}"" value=""{argument.Value.ToCSharpXMLEncodedString()}"">");
                         sb.AppendLine(TypeReferenceXml(argument.Value.Type));
                         sb.AppendLine("</argument>");
 
@@ -397,7 +392,7 @@ namespace DocWorks.Integration.XmlDoc
                 return "";
 
             return $@"<typeParameters>
-{string.Join((string) "\n", typeParameters.Select(p => TypeParameterXml(p, true, false)))}
+{string.Join("\n", typeParameters.Select(p => TypeParameterXml(p, true, false)))}
 </typeParameters>";
         }
 
@@ -415,7 +410,7 @@ namespace DocWorks.Integration.XmlDoc
                 return TypeParameterXml(sourceTypeParameterSymbol, includeMetaInfo, true);
             }
             var typeTagAttributes =
-                $"typeId=\"{typeSymbol.Id()}\" typeName=\"{XmlUtility.EscapeString(typeSymbol.ToDisplayString())}\"";
+                $"typeId=\"{typeSymbol.Id()}\" typeName=\"{typeSymbol.ToDisplayString().XMLEncoded()}\"";
 
             if (typeSymbol is IArrayTypeSymbol)
             {
@@ -474,9 +469,9 @@ namespace DocWorks.Integration.XmlDoc
 
             string declaringTypeId = "";
             if (includeDeclaringTypeId)
-                declaringTypeId = $@" declaringTypeId=""{sourceTypeParameterSymbol.DeclaringType.Id()}""";
+                declaringTypeId = $@" declaringTypeId=""{sourceTypeParameterSymbol.DeclaringType.Id().XMLEncoded()}""";
 
-            string typeParameterTag = $@"typeParameter{declaringTypeId} name=""{sourceTypeParameterSymbol.Name}""{constraintAttributes}";
+            string typeParameterTag = $@"typeParameter{declaringTypeId} name=""{sourceTypeParameterSymbol.Name.XMLEncoded()}""{constraintAttributes}";
             if (!string.IsNullOrEmpty(body))
             {
                 return $@"<{typeParameterTag}>
@@ -521,7 +516,7 @@ namespace DocWorks.Integration.XmlDoc
                             throw new NotSupportedException("Unsupported default value declaration: " + parameter.ToDisplayString());
                     }
                     else
-                        defaultValue = parameter.ExplicitDefaultValue.ToString();
+                        defaultValue = parameter.ExplicitDefaultValue.ToString().XMLEncoded();
 
                     defaultValueAttribute = $@" defaultValue=""{defaultValue}""";
                 }
