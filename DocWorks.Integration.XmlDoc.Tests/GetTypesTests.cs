@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace DocWorks.Integration.XmlDoc.Tests
@@ -1326,6 +1328,35 @@ namespace DocWorks.Integration.XmlDoc.Tests
             else
                 AssertXmlContains(data.expectedXml, actualXml);
         }
+
+        [Test]
+        public void temp()
+        {
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(@"C:\Programming\Projects\DocworksProjects\DocWorks.Utility\DocWorks.Utility.Manifest.Tests"));
+            string xml = handler.GetTypeDocumentation("DocWorks.Utility.Manifest.Tests.XmlTestClasses.XmlTestWithTripleSlashes", 
+                @"C:\Programming\Projects\DocworksProjects\DocWorks.Utility\DocWorks.Utility.Manifest.Tests\bin\Debug\netcoreapp2.0\XmlTestClasses\XmlTestWithTripleSlashes.cs");
+            
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            foreach (XmlNode childNodeV1 in doc.ChildNodes)
+            {
+                foreach (XmlNode childNodeV2 in childNodeV1.ChildNodes)
+                {
+                    foreach (XmlNode childNodeV3 in childNodeV2.ChildNodes)
+                    {
+                        if (childNodeV3.Name == "xmldoc")
+                        {
+                            Regex summaryRegex = new Regex(@"<summary>(.+?)</summary>");
+                            MatchCollection matches = summaryRegex.Matches(childNodeV3.InnerXml);
+                            string summary = matches[0].Groups[1].Value;
+                            Assert.AreEqual(2, matches.Count);
+                            Assert.AreEqual("This is the first class in the file", summary);
+                        }
+                    }
+                }
+            }
+        }
+        
 
         private void AssertValidXml(string actualXml)
         {
