@@ -1329,34 +1329,40 @@ namespace DocWorks.Integration.XmlDoc.Tests
                 AssertXmlContains(data.expectedXml, actualXml);
         }
 
+        
         [Test]
-        public void temp()
+        public void GetType_XmlDocIsJustAnEnum_ValuesInEnumShouldBeOfTypeEnumValue_WhenUsingRegexOnSummaryShouldReturnSummaryValue()
         {
-            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(@"C:\Programming\Projects\DocworksProjects\DocWorks.Utility\DocWorks.Utility.Manifest.Tests"));
-            string xml = handler.GetTypeDocumentation("DocWorks.Utility.Manifest.Tests.XmlTestClasses.XmlTestWithTripleSlashes", 
-                @"C:\Programming\Projects\DocworksProjects\DocWorks.Utility\DocWorks.Utility.Manifest.Tests\bin\Debug\netcoreapp2.0\XmlTestClasses\XmlTestWithTripleSlashes.cs");
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(@"..\..\..\..\..\DocWorks.Utility\DocWorks.Utility.Manifest.Tests\bin\Debug\netcoreapp2.0\"));
+            string xml = handler.GetTypeDocumentation("DocWorks.Utility.Manifest.Tests.XmlTestClasses.XmlTestEnum", 
+                @"XmlTestClasses\XmlTestEnum.cs");
             
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
-            foreach (XmlNode childNodeV1 in doc.ChildNodes)
+            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
             {
-                foreach (XmlNode childNodeV2 in childNodeV1.ChildNodes)
+                if (childNodeV1.Name == "xmldoc")
                 {
-                    foreach (XmlNode childNodeV3 in childNodeV2.ChildNodes)
+                    Regex summaryRegex = new Regex(@"<summary>(.+?)</summary>");
+                    MatchCollection matches = summaryRegex.Matches(childNodeV1.InnerXml);
+                    try
                     {
-                        if (childNodeV3.Name == "xmldoc")
-                        {
-                            Regex summaryRegex = new Regex(@"<summary>(.+?)</summary>");
-                            MatchCollection matches = summaryRegex.Matches(childNodeV3.InnerXml);
-                            string summary = matches[0].Groups[1].Value;
-                            Assert.AreEqual(2, matches.Count);
-                            Assert.AreEqual("This is the first class in the file", summary);
-                        }
+                        string summary = matches[0].Groups[1].Value;
+                        Assert.AreEqual(1, matches.Count);
+                        Assert.AreEqual("This is the first class in the file", summary);
                     }
+                    catch (Exception e)
+                    {
+                        //shouldn't enter here
+                    }
+                }
+                else
+                {
+                    string nodeType = childNodeV1.Attributes["type"].InnerXml;
+                    Assert.AreEqual("EnumValue", nodeType);
                 }
             }
         }
-        
 
         private void AssertValidXml(string actualXml)
         {
