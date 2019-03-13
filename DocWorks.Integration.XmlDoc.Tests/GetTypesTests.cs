@@ -1349,7 +1349,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     {
                         string summary = matches[0].Groups[1].Value;
                         Assert.AreEqual(1, matches.Count);
-                        Assert.AreEqual("This is the first class in the file", summary);
+                        Assert.AreEqual("Live Enum Value", summary);
                     }
                     catch (Exception e)
                     {
