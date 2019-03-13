@@ -210,4 +210,11 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="testclasses\XmlTestEnum.cs" />
+    <None Include="testclasses\XmlTestEnum.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

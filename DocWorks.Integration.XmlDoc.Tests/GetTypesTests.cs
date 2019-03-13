@@ -1333,9 +1333,9 @@ namespace DocWorks.Integration.XmlDoc.Tests
         [Test]
         public void GetType_XmlDocIsJustAnEnum_ValuesInEnumShouldBeOfTypeEnumValue_WhenUsingRegexOnSummaryShouldReturnSummaryValue()
         {
-            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(@"..\..\..\..\..\DocWorks.Utility\DocWorks.Utility.Manifest.Tests\bin\Debug\netcoreapp2.0\"));
-            string xml = handler.GetTypeDocumentation("DocWorks.Utility.Manifest.Tests.XmlTestClasses.XmlTestEnum", 
-                @"XmlTestClasses\XmlTestEnum.cs");
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
+            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.testclasses.XmlTestEnum", 
+                @"testclasses\XmlTestEnum.cs");
             
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
