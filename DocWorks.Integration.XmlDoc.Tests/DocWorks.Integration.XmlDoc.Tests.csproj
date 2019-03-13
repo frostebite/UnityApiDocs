@@ -210,4 +210,28 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="testclasses\XmlTestEnum.cs" />
+    <Compile Remove="testclasses\XmlTestSingleLineSummary.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="XmlTestClasses\XmlTestEnumSingleLineSummary.cs" />
+    <None Include="XmlTestClasses\XmlTestEnumSingleLineSummary.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Remove="XmlTestClasses\XmlTestEnumMultiLineSummary.cs" />
+    <None Include="XmlTestClasses\XmlTestEnumMultiLineSummary.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Remove="XmlTestClasses\XmlTestClassSingleLineSummary.cs" />
+    <None Include="XmlTestClasses\XmlTestClassSingleLineSummary.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Remove="XmlTestClasses\XmlTestClassMultiLineSummary.cs" />
+    <None Include="XmlTestClasses\XmlTestClassMultiLineSummary.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

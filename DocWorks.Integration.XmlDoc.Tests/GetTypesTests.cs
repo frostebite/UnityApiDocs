@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace DocWorks.Integration.XmlDoc.Tests
@@ -1325,6 +1327,176 @@ namespace DocWorks.Integration.XmlDoc.Tests
                 AssertXml(data.expectedXml, actualXml);
             else
                 AssertXmlContains(data.expectedXml, actualXml);
+        }
+
+        
+        [Test]
+        public void GetType_Enum_ValuesInEnumAreOfTypeEnumValue_UseRegexToRetrieveSummary_ReturnsSummary_SummaryIsOnSingleLine()
+        {
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
+            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestEnumSingleLineSummary", @"XmlTestClasses\XmlTestEnumSingleLineSummary.cs");
+            
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
+            {
+                if (childNodeV1.Name == "xmldoc")
+                {
+                    try
+                    {
+                        string summary = GetSummary(childNodeV1);
+                        Assert.AreEqual("Live Enum Value", summary);
+                    }
+                    catch (Exception e)
+                    {
+                        //shouldn't enter here
+                    }
+                }
+                else
+                {
+                    string enumValueType = childNodeV1.Attributes["type"].InnerXml;
+                    Assert.AreEqual("EnumValue", enumValueType);
+                }
+            }
+        }
+        
+        [Test]
+        public void GetType_Enum_ValuesInEnumAreOfTypeEnumValue_UseRegexToRetrieveSummary_ReturnsSummary_SummaryIsOnMultipleLines()
+        {
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
+            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestEnumMultiLineSummary", @"XmlTestClasses\XmlTestEnumMultiLineSummary.cs");
+            
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
+            {
+                if (childNodeV1.Name == "xmldoc")
+                {
+                    try
+                    {
+                        string summary = GetSummary(childNodeV1);
+                        Assert.AreEqual("Live Enum Value", summary);
+                    }
+                    catch (Exception e)
+                    {
+                        //shouldn't enter here
+                    }
+                }
+                else
+                {
+                    string enumValueType = childNodeV1.Attributes["type"].InnerXml;
+                    Assert.AreEqual("EnumValue", enumValueType);
+                }
+            }
+        }
+        
+        [Test]
+        public void GetType_Class_SummaryIsOnMultipleLines_ReturnsSummary()
+        {
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
+            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestClassMultiLineSummary", @"XmlTestClasses\XmlTestClassMultiLineSummary.cs");
+            
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
+            {
+                if (childNodeV1.Name == "xmldoc")
+                {
+                    try
+                    {
+                        string summary = GetSummary(childNodeV1);
+                        Assert.AreEqual("class summary", summary);
+                    }
+                    catch (Exception e)
+                    {
+                        //shouldn't enter here
+                    }
+                }
+                else
+                {
+                    Dictionary<string, string> differentTypesOfDescription = GetMethodDescriptions(childNodeV1.ChildNodes[1]);
+                    Assert.AreEqual("function summary", differentTypesOfDescription["summary"]);
+                    Assert.AreEqual("parameter description", differentTypesOfDescription["parameter1"]);
+                    Assert.AreEqual("this is what the function returns", differentTypesOfDescription["returns"]);
+                    Assert.AreEqual("exception description", differentTypesOfDescription["exception1"]);
+                }
+            }
+        }
+        
+        [Test]
+        public void GetType_Class_SummaryIsOnSingleLines_ReturnsSummary()
+        {
+            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
+            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestClassSingleLineSummary", @"XmlTestClasses\XmlTestClassSingleLineSummary.cs");
+            
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
+            {
+                if (childNodeV1.Name == "xmldoc")
+                {
+                    try
+                    {
+                        string summary = GetSummary(childNodeV1);
+                        Assert.AreEqual("class summary", summary);
+                    }
+                    catch (Exception e)
+                    {
+                        //shouldn't enter here
+                    }
+                }
+                else
+                {
+                    Dictionary<string, string> differentTypesOfDescription = GetMethodDescriptions(childNodeV1.ChildNodes[1]);
+                    Assert.AreEqual("function summary", differentTypesOfDescription["summary"]);
+                    Assert.AreEqual("parameter description", differentTypesOfDescription["parameter1"]);
+                    Assert.AreEqual("this is what the function returns", differentTypesOfDescription["returns"]);
+                    Assert.AreEqual("exception description", differentTypesOfDescription["exception1"]);
+                }
+            }
+        }
+
+        private Dictionary<string, string> GetMethodDescriptions(XmlNode xmlNode)
+        {
+            string summary = GetSummary(xmlNode);
+            string parameter1 = GetParameter(xmlNode);
+            string returns = GetReturns(xmlNode);
+            string exception1 = GetException(xmlNode);
+            return new Dictionary<string, string>
+            {
+                {"summary", summary},
+                {"parameter1", parameter1},
+                {"returns", returns},
+                {"exception1", exception1}
+            };
+        }
+
+        private string GetException(XmlNode xmlNode)
+        {
+            Regex summaryRegex = new Regex(@"<exception cref=""T:System.Exception"">(.+?)</exception>");
+            MatchCollection matches = summaryRegex.Matches(xmlNode.InnerXml);
+            return matches[0].Groups[1].Value;
+        }
+
+        private string GetReturns(XmlNode xmlNode)
+        {
+            Regex summaryRegex = new Regex(@"<returns>(.+?)</returns>");
+            MatchCollection matches = summaryRegex.Matches(xmlNode.InnerXml);
+            return matches[0].Groups[1].Value;
+        }
+
+        private string GetParameter(XmlNode xmlNode)
+        {
+            Regex summaryRegex = new Regex(@"<param name=""randomParameter"">(.+?)</param>");
+            MatchCollection matches = summaryRegex.Matches(xmlNode.InnerXml);
+            return matches[0].Groups[1].Value;
+        }
+
+        private string GetSummary(XmlNode xmlNode)
+        {
+            Regex summaryRegex = new Regex(@"<summary>(.+?)</summary>");
+            MatchCollection matches = summaryRegex.Matches(xmlNode.InnerXml);
+            return matches[0].Groups[1].Value;
         }
 
         private void AssertValidXml(string actualXml)
