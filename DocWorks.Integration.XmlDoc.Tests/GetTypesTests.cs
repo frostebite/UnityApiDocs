@@ -1326,6 +1326,20 @@ namespace DocWorks.Integration.XmlDoc.Tests
             else
                 AssertXmlContains(data.expectedXml, actualXml);
         }
+        
+        [Test]
+        public void GivenType_WithAMember_HavingRefArgument_GetTypeDocumentation_ShouldReturn_SomeIndicatorForRef()
+        {
+            CompilationParameters compilationParameters = new CompilationParameters(".", Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
+            var handler = new XMLDocHandler(compilationParameters);
+            string actualXml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithMemberWithRefArgument", "TestTypes/ClassWithMemberWithRefArgument.cs");
+            var doc = new XmlDocument();
+            doc.LoadXml(actualXml);
+            XmlNodeList nodes = doc.DocumentElement.SelectNodes("member/member[@name='RefMember']/signature/parameters");
+            Assert.That(nodes[0].InnerXml, Is.Not.EqualTo(nodes[1].InnerXml));
+            XmlNodeList nodesStatic = doc.DocumentElement.SelectNodes("member/member[@name='RefMemberStatic']/signature/parameters");
+            Assert.That(nodesStatic[0].InnerXml, Is.Not.EqualTo(nodesStatic[1].InnerXml));
+        }
 
         private void AssertValidXml(string actualXml)
         {

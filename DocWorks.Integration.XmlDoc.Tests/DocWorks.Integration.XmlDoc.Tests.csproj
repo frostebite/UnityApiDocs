@@ -25,6 +25,9 @@
     <Compile Update="TestTypes\Attributes\ClassWithAttributes.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestTypes\ClassWithMemberWithRefArgument.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestTypes\Attributes\ClassWithAttributeWithStringArgument.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
