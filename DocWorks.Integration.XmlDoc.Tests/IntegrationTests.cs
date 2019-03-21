@@ -79,5 +79,39 @@ namespace DocWorks.Integration.XmlDoc.Tests
 
             Assert.IsEmpty(randomComments, "Did not write all comments back properly. Xml used to set:\n" + getTypeXmlString);
         }
+        
+        [Test]
+        [TestCaseSource(nameof(CanReadTypesAndWriteToAllMembersTestCases))]
+        public void CanReadTypesAndWriteToAllMembers_WithoutEditingXml(XMLDocHandler handler, string id, string[] paths)
+        {
+            string typeXml = handler.GetTypeDocumentation(id, paths);
+
+            var tempPaths = paths.ToDictionary(p => p, p =>
+            {
+                var tempPath = Path.GetTempFileName();
+                File.Copy(Path.Combine(TestFileDirectory, p), tempPath, true);
+                return tempPath;
+            });
+
+            try
+            {
+                handler.SetType(typeXml, paths);
+                foreach (var path in paths)
+                {
+                    var fullPath = Path.Combine(TestFileDirectory, path);
+                    var content = File.ReadAllText(fullPath);
+                    var tempPathContent = File.ReadAllText(tempPaths[path]);
+                    Assert.AreEqual(tempPathContent, content);
+                }
+            }
+            finally
+            {
+                foreach (var path in paths)
+                {
+                    var fullPath = Path.Combine(TestFileDirectory, path);
+                    File.Copy(tempPaths[path], fullPath, true);
+                }
+            }
+        }
     }
 }
