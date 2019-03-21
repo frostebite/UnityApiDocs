@@ -1331,7 +1331,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
 
         
         [Test]
-        public void GetType_Enum_ValuesInEnumAreOfTypeEnumValue_UseRegexToRetrieveSummary_ReturnsSummary_SummaryIsOnSingleLine()
+        public void GetType_Enum_ValuesInEnumAreOfTypeEnumValue()
         {
             XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
             string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestEnumSingleLineSummary", @"XmlTestClasses\XmlTestEnumSingleLineSummary.cs");
@@ -1340,53 +1340,10 @@ namespace DocWorks.Integration.XmlDoc.Tests
             doc.LoadXml(xml);
             foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
             {
-                if (childNodeV1.Name == "xmldoc")
-                {
-                    try
-                    {
-                        string summary = GetSummary(childNodeV1);
-                        Assert.AreEqual("Live Enum Value", summary);
-                    }
-                    catch (Exception e)
-                    {
-                        //shouldn't enter here
-                    }
-                }
-                else
-                {
-                    string enumValueType = childNodeV1.Attributes["type"].InnerXml;
-                    Assert.AreEqual("EnumValue", enumValueType);
-                }
-            }
-        }
-        
-        [Test]
-        public void GetType_Enum_ValuesInEnumAreOfTypeEnumValue_UseRegexToRetrieveSummary_ReturnsSummary_SummaryIsOnMultipleLines()
-        {
-            XMLDocHandler handler = new XMLDocHandler(MakeCompilationParameters(AppContext.BaseDirectory));
-            string xml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.XmlTestClasses.XmlTestEnumMultiLineSummary", @"XmlTestClasses\XmlTestEnumMultiLineSummary.cs");
-            
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            foreach (XmlNode childNodeV1 in doc.ChildNodes[1].ChildNodes[0])
-            {
-                if (childNodeV1.Name == "xmldoc")
-                {
-                    try
-                    {
-                        string summary = GetSummary(childNodeV1);
-                        Assert.AreEqual("Live Enum Value", summary);
-                    }
-                    catch (Exception e)
-                    {
-                        //shouldn't enter here
-                    }
-                }
-                else
-                {
-                    string enumValueType = childNodeV1.Attributes["type"].InnerXml;
-                    Assert.AreEqual("EnumValue", enumValueType);
-                }
+                if (childNodeV1.Name == "xmldoc") continue;
+                
+                string enumValueType = childNodeV1.Attributes["type"].InnerXml;
+                Assert.AreEqual("EnumValue", enumValueType);
             }
         }
         
@@ -1409,7 +1366,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     }
                     catch (Exception e)
                     {
-                        //shouldn't enter here
+                        Assert.Fail();
                     }
                 }
                 else
@@ -1442,7 +1399,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     }
                     catch (Exception e)
                     {
-                        //shouldn't enter here
+                        Assert.Fail();
                     }
                 }
                 else
