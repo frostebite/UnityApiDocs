@@ -101,6 +101,12 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     var fullPath = Path.Combine(TestFileDirectory, path);
                     var content = File.ReadAllText(fullPath);
                     var tempPathContent = File.ReadAllText(tempPaths[path]);
+                    if (!string.Equals(tempPathContent, content))
+                    {
+                        Console.WriteLine(tempPathContent);
+                        Console.WriteLine(content);
+                        Assert.AreEqual(tempPathContent, content);
+                    }
                     Assert.AreEqual(tempPathContent, content);
                 }
             }
