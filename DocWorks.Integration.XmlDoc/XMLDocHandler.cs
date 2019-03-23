@@ -35,10 +35,17 @@ namespace DocWorks.Integration.XmlDoc
         private CompilationParameters compilationParameters;
         private CSharpCompilation csharpCompilation;
         private Dictionary<string, SyntaxTree> treesForPaths;
+        private List<string> csFilePaths;
 
         public XMLDocHandler(CompilationParameters compilationParameters)
         {
             this.compilationParameters = compilationParameters;
+        }
+
+        public XMLDocHandler(CompilationParameters compilationParameters, List<string> csFilePaths)
+        {
+            this.compilationParameters = compilationParameters;
+            this.csFilePaths = csFilePaths;
         }
 
         public string GetTypesXml()
@@ -49,7 +56,7 @@ namespace DocWorks.Integration.XmlDoc
 
             var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp6, DocumentationMode.Parse, SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
 
-            var filePaths = GetFullPathsFromDirectory(compilationParametersRootPath);
+            var filePaths = GetCSFilePaths();
 
             var startIndex = compilationParametersRootPath.Length + (compilationParametersRootPath.EndsWith("\\") || compilationParametersRootPath.EndsWith("/") ? 0 : 1);
             var syntaxTrees = filePaths.Select(
@@ -211,7 +218,7 @@ namespace DocWorks.Integration.XmlDoc
             var parserOptions = new CSharpParseOptions(LanguageVersion.CSharp6, DocumentationMode.Parse,
                 SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
 
-            var csFilePaths = GetFullPathsFromDirectory(compilationParameters.RootPath);
+            var csFilePaths = GetCSFilePaths();
             
             var syntaxTrees = csFilePaths.Select(
                 p =>
@@ -606,7 +613,12 @@ namespace DocWorks.Integration.XmlDoc
                 }
             }
         }
-        
+
+        private IEnumerable<string> GetCSFilePaths()
+        {
+            return csFilePaths != null ? GetFullPathsFromRelativePath(csFilePaths.ToArray()) : GetFullPathsFromDirectory(Path.GetFullPath(compilationParameters.RootPath));
+        }
+
         private IEnumerable<string> GetFullPathsFromRelativePath(string[] relativeFilePaths)
         {
             return relativeFilePaths.Select(p => Path.GetFullPath(Path.Combine(compilationParameters.RootPath, p))).Where(p => !compilationParameters.ExcludedPaths.Any(p.StartsWith));
