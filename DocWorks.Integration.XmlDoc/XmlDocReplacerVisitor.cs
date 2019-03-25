@@ -165,7 +165,7 @@ namespace DocWorks.Integration.XmlDoc
                 }
                 constraints += $@" and not(signature/parameters/parameter[{xpathIdx}])";
             }
-
+            //this is where we need to add code in for integration test checking duplicate members
             var docNodes = parentNode.SelectNodes($"member[@name='{symbol.MemberNameUnescaped()}'{constraints}]/xmldoc");
 
             return AddOrUpdateXmlDoc(originalNode, nodeToUpdate, docNodes, symbol);

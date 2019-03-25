@@ -526,11 +526,16 @@ namespace DocWorks.Integration.XmlDoc
 
         private string ParametersSignature(IEnumerable<IParameterSymbol> parameters)
         {
-            var sb = new StringBuilder();
-            foreach (var parameter in parameters)
+            StringBuilder sb = new StringBuilder();
+            foreach (IParameterSymbol parameter in parameters)
             {
                 string paramsAttribute = parameter.IsParams ? @" isParams=""true""" : "";
                 string optionalAttribute = parameter.IsOptional ? @" isOptional=""true""" : "";
+                string refAttribute = "";
+                if (parameter.RefKind == RefKind.Ref)
+                {
+                    refAttribute = @" passByRef=""True""";
+                }
                 string defaultValueAttribute;
                 ParameterSyntax theParameter;
                 if (parameter.HasExplicitDefaultValue)
@@ -538,7 +543,7 @@ namespace DocWorks.Integration.XmlDoc
                     string defaultValue;
                     if (parameter.ExplicitDefaultValue == null)
                     {
-                        var parameterWithDefault = parameter.DeclaringSyntaxReferences.Select(reference => (ParameterSyntax)reference.GetSyntax()).FirstOrDefault(p => p.Default != null);
+                        ParameterSyntax parameterWithDefault = parameter.DeclaringSyntaxReferences.Select(reference => (ParameterSyntax)reference.GetSyntax()).FirstOrDefault(p => p.Default != null);
                         if (parameterWithDefault != null)
                             defaultValue = parameterWithDefault.Default.Value.ToFullString();
                         else
@@ -547,7 +552,7 @@ namespace DocWorks.Integration.XmlDoc
                     else
                         defaultValue = parameter.ExplicitDefaultValue.ToString();
 
-                    var isString = parameter.Type.SpecialType == SpecialType.System_String;
+                    bool isString = parameter.Type.SpecialType == SpecialType.System_String;
                     if (isString)
                         defaultValue = XmlUtility.EscapeString(defaultValue);
 
@@ -557,10 +562,10 @@ namespace DocWorks.Integration.XmlDoc
                     defaultValueAttribute = "";
 
                 string parameterTag =
-                    $"parameter name=\"{parameter.Name}\"{paramsAttribute}{optionalAttribute}{defaultValueAttribute}";
+                    $"parameter name=\"{parameter.Name}\"{paramsAttribute}{optionalAttribute}{defaultValueAttribute}{refAttribute}";
 
 
-                var attributesXml = AttributesXml(parameter);
+                string attributesXml = AttributesXml(parameter);
 
                 sb.AppendLine($@"<{parameterTag}>
     {TypeReferenceXml(parameter.Type)}
