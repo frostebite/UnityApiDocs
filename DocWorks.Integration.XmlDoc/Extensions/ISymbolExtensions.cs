@@ -112,11 +112,16 @@ namespace DocWorks.Integration.XmlDoc.Extensions
 
         internal static string Id(this IMethodSymbol symbol)
         {
-            string id = $@"{FullyQualifiedName(symbol.ReturnType, true, NameFormat.NameWithGenericArguments)} {FullyQualifiedName(symbol, true, NameFormat.NameWithGenericArguments)}({string.Join(", ", symbol.Parameters.Select(p => FullyQualifiedName(p.Type, true, NameFormat.NameWithGenericArguments)))})";
+            string id = $@"{FullyQualifiedName(symbol.ReturnType, true, NameFormat.NameWithGenericArguments)} {FullyQualifiedName(symbol, true, NameFormat.NameWithGenericArguments)}({string.Join(", ", symbol.Parameters.Select(ParameterId))})";
             if (symbol.IsStatic)
                 id = "static " + id;
 
             return id;
+        }
+
+        private static string ParameterId(IParameterSymbol p)
+        {
+            return $@"{p.RefKind} " + FullyQualifiedName(p.Type, true, NameFormat.NameWithGenericArguments); //Refactor later - if ref kind is none this is not needed
         }
 
         internal static string FullyQualifiedName(this ISymbol t, bool includeNamespace, NameFormat nameFormat)

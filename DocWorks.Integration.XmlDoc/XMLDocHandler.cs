@@ -531,13 +531,9 @@ namespace DocWorks.Integration.XmlDoc
             {
                 string paramsAttribute = parameter.IsParams ? @" isParams=""true""" : "";
                 string optionalAttribute = parameter.IsOptional ? @" isOptional=""true""" : "";
-                string refAttribute = "";
-                if (parameter.RefKind == RefKind.Ref)
-                {
-                    refAttribute = @" passByRef=""True""";
-                }
+                string refAttribute = $@" passByRef='{parameter.RefKind}'"; //if there is no ref kind do not add ref attribute
                 string defaultValueAttribute;
-                ParameterSyntax theParameter;
+                
                 if (parameter.HasExplicitDefaultValue)
                 {
                     string defaultValue;
@@ -579,32 +575,32 @@ namespace DocWorks.Integration.XmlDoc
         {
             EnsureCompiled();
 
-            var fullPaths = sourcePaths.Select(p => Path.GetFullPath(Path.Combine(compilationParameters.RootPath, p)));
+            IEnumerable<string> fullPaths = sourcePaths.Select(p => Path.GetFullPath(Path.Combine(compilationParameters.RootPath, p)));
 
-            var nonExistantFile = fullPaths.FirstOrDefault(p => !File.Exists(p));
+            string nonExistantFile = fullPaths.FirstOrDefault(p => !File.Exists(p));
             if (nonExistantFile != null)
                 throw new FileNotFoundException(nonExistantFile + " does not exist");
-            var nonScriptFile = sourcePaths.FirstOrDefault(p => !string.Equals(".cs", Path.GetExtension(p), StringComparison.OrdinalIgnoreCase));
+            string nonScriptFile = sourcePaths.FirstOrDefault(p => !string.Equals(".cs", Path.GetExtension(p), StringComparison.OrdinalIgnoreCase));
             if (nonScriptFile != null)
                 throw new ArgumentException(nonScriptFile + " is not a .cs file. Only .cs files are supported.");
 
-            var partialInfoCollector = new PartialTypeInfoCollectorVisitor(docXml);
-            foreach (var fullPath in fullPaths)
+            PartialTypeInfoCollectorVisitor partialInfoCollector = new PartialTypeInfoCollectorVisitor(docXml);
+            foreach (string fullPath in fullPaths)
             {
                 SyntaxTree syntaxTree;
                 if (!treesForPaths.TryGetValue(fullPath, out syntaxTree))
                     throw new ArgumentException(fullPath + " is not contained in root path " + compilationParameters.RootPath);
 
-                var semanticModel = csharpCompilation.GetSemanticModel(syntaxTree);
+                SemanticModel semanticModel = csharpCompilation.GetSemanticModel(syntaxTree);
                 partialInfoCollector.Visit(syntaxTree.GetRoot(), semanticModel);
             }
 
-            var docUpdater = new XmlDocReplacerVisitor(docXml, partialInfoCollector);
-            foreach (var fullPath in fullPaths)
+            XmlDocReplacerVisitor docUpdater = new XmlDocReplacerVisitor(docXml, partialInfoCollector);
+            foreach (string fullPath in fullPaths)
             {
-                var syntaxTree = treesForPaths[fullPath];
-                var semanticModel = csharpCompilation.GetSemanticModel(syntaxTree);
-                var result = docUpdater.Visit(syntaxTree.GetRoot(), semanticModel);
+                SyntaxTree syntaxTree = treesForPaths[fullPath];
+                SemanticModel semanticModel = csharpCompilation.GetSemanticModel(syntaxTree);
+                SyntaxNode result = docUpdater.Visit(syntaxTree.GetRoot(), semanticModel);
 
                 if (result != syntaxTree.GetRoot())
                 {

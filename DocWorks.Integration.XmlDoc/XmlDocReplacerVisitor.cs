@@ -154,13 +154,16 @@ namespace DocWorks.Integration.XmlDoc
                 {
                     var parameterType = parameter.Type;
                     if (parameterType is ITypeParameterSymbol)
+                    {
                         constraints += $@" and signature/parameters/parameter[{xpathIdx}]/typeParameter/@name='{parameterType.Name}'";
+                    }
                     else
                     {
                         var constraintPrefix = $@" and signature/parameters/parameter[{xpathIdx}]/";
                         constraints = AddTypeConstraints(constraints, constraintPrefix, parameterType);
                     }
-
+                    
+                    constraints += $@" and signature/parameters/parameter[{xpathIdx}]/@passByRef='{parameter.RefKind}'";
                     xpathIdx++;
                 }
                 constraints += $@" and not(signature/parameters/parameter[{xpathIdx}])";
@@ -177,7 +180,9 @@ namespace DocWorks.Integration.XmlDoc
             if (isTypeParameter)
                 constraints += $@"{constraintPrefix}typeParameter/@name='{parameterType.Name}'";
             else
+            {
                 constraints += $@"{constraintPrefix}type/@typeId='{parameterType.Id()}'";
+            }
 
             if (parameterType is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)
             {
