@@ -793,7 +793,7 @@ public class ClassInGlobalNamespace
     </member>
 </doc>",
                     expectedSource = @"    /// <summary>
-    ///     New class docs
+    /// New class docs
     /// </summary>
     public class ClassWithProtectedMethod
     {
@@ -801,7 +801,7 @@ public class ClassInGlobalNamespace
 
         
         /// <summary>
-        ///     New method docs
+        /// New method docs
         /// </summary>
         protected void ProtectedMethod()
         {

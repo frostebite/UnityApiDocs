@@ -2,7 +2,7 @@
 {
     // Type-Prefix
     /// <summary>
-    ///Type- Summary
+    /// Type- Summary
     /// </summary>
     // Type-Sufix
     public class ClassWithXmlDocsAndNormalComments

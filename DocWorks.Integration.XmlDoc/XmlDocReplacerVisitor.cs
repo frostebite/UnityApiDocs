@@ -209,9 +209,9 @@ namespace DocWorks.Integration.XmlDoc
         private SyntaxNode AddOrUpdateXmlDoc(SyntaxNode originalNode, SyntaxNode nodeToBeUpdated, XmlNode docNode,
             ISymbol symbol)
         {
-            var docTrivia = nodeToBeUpdated.GetLeadingTrivia();
+            SyntaxTriviaList docTrivia = nodeToBeUpdated.GetLeadingTrivia();
 
-            var initialWhitespace = docTrivia.Where(t => t.IsKind(SyntaxKind.WhitespaceTrivia) || t.IsKind(SyntaxKind.EndOfLineTrivia)).ToArray();
+            SyntaxTrivia[] initialWhitespace = docTrivia.Where(t => t.IsKind(SyntaxKind.WhitespaceTrivia) || t.IsKind(SyntaxKind.EndOfLineTrivia)).ToArray();
             int lastNewLineIndex = Array.FindLastIndex(initialWhitespace, t => t.Kind() == SyntaxKind.EndOfLineTrivia);
             if (lastNewLineIndex >= 0)
                 initialWhitespace = initialWhitespace.Skip(lastNewLineIndex + 1).ToArray();
@@ -220,21 +220,24 @@ namespace DocWorks.Integration.XmlDoc
             {
                 initialWhitespace = initialWhitespace.Take(1).ToArray();
             }
-            var rawWhitespace = string.Join("", initialWhitespace.Select(t => t.ToFullString()));
+
+            var temp4 = initialWhitespace.Select(t => t.ToFullString());
+            string rawWhitespace = string.Join("", temp4);
+
+            var temp1 = docNode.InnerText.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries);
+            var temp2 = temp1.Where(x => !string.IsNullOrWhiteSpace(x));
+            var temp3 = temp2.Select(item => "/// " + item.Trim());
 
             // break lines (to inject ///) at both CRLF & LF.
-            var comment = string.Join("\r\n" + rawWhitespace, 
-                docNode.InnerText.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries)
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .Select(item => "/// " + item));
+            string comment = string.Join("\r\n" + rawWhitespace.Substring(rawWhitespace.Length / 2), temp3);
+                
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(comment);
+            SyntaxNode xmlDocumentNode = syntaxTree.GetRoot();
 
-            var syntaxTree = CSharpSyntaxTree.ParseText(comment);
-            var xmlDocumentNode = syntaxTree.GetRoot();
+            SyntaxTriviaList newTrivia = SyntaxFactory.TriviaList();
 
-            var newTrivia = SyntaxFactory.TriviaList();
-
-            var shouldUpdate = _partialTypeInfoCollector.ShouldThisNodeBeDocumented(originalNode, symbol);
-            foreach (var trivia in docTrivia)
+            bool shouldUpdate = _partialTypeInfoCollector.ShouldThisNodeBeDocumented(originalNode, symbol);
+            foreach (SyntaxTrivia trivia in docTrivia)
             {
                 if (!trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
@@ -243,13 +246,13 @@ namespace DocWorks.Integration.XmlDoc
                 else if (shouldUpdate)
                 {
                     shouldUpdate = false;
-                    newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia().Add(SyntaxFactory.CarriageReturnLineFeed).AddRange(initialWhitespace));
+                    newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia().Add(SyntaxFactory.CarriageReturnLineFeed));
                 }
             }
 
             if (shouldUpdate)
             {
-                newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia().Add(SyntaxFactory.CarriageReturnLineFeed).AddRange(initialWhitespace));
+                newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia());
             }
 
             return nodeToBeUpdated.WithLeadingTrivia(newTrivia);
