@@ -161,14 +161,14 @@ namespace DocWorks.Integration.XmlDoc
                     {
                         var constraintPrefix = $@" and signature/parameters/parameter[{xpathIdx}]/";
                         constraints = AddTypeConstraints(constraints, constraintPrefix, parameterType);
+                        constraints += $@" and signature/parameters/parameter[{xpathIdx}]/@refKind='{parameter.RefKind}'";
                     }
                     
-                    constraints += $@" and signature/parameters/parameter[{xpathIdx}]/@passByRef='{parameter.RefKind}'";
                     xpathIdx++;
                 }
                 constraints += $@" and not(signature/parameters/parameter[{xpathIdx}])";
             }
-            //this is where we need to add code in for integration test checking duplicate members
+
             var docNodes = parentNode.SelectNodes($"member[@name='{symbol.MemberNameUnescaped()}'{constraints}]/xmldoc");
 
             return AddOrUpdateXmlDoc(originalNode, nodeToUpdate, docNodes, symbol);
