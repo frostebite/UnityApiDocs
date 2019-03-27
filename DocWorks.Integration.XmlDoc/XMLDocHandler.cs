@@ -176,6 +176,12 @@ namespace DocWorks.Integration.XmlDoc
         private static string GetCDataDocXml(Regex extraMemberRegEx, ISymbol typeSymbol)
         {
             var xml = typeSymbol.GetDocumentationCommentXml();
+            if (xml.Contains("<!-- Badly formed XML"))
+            {
+                Console.WriteLine("Badly formed Xml in member " + typeSymbol.Name + " of namespace " + typeSymbol.ContainingNamespace);
+                return @"<![CDATA[]]>";
+            }
+                
             xml = extraMemberRegEx.Replace(xml, "");
             xml = string.Join("\r\n", xml.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Substring(4)));
             //xml = XmlUtility.LegalString(xml);
