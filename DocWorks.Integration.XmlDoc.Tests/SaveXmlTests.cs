@@ -355,7 +355,7 @@ Updated Docs
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </return>
                 <parameters>
-                    <parameter name=""i"" >
+                    <parameter name=""i"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                     </parameter>
                 </parameters>
@@ -480,10 +480,10 @@ Updated Docs
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </return>
                 <parameters>
-                    <parameter name=""classWithOperator"" >
+                    <parameter name=""classWithOperator"" refKind=""None"">
                         <type typeId=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOperator"" typeName=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOperator"" />
                     </parameter>
-                    <parameter name=""other"" >
+                    <parameter name=""other"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                     </parameter>
                 </parameters>
@@ -552,7 +552,7 @@ Updated Docs
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </return>
                 <parameters>
-                    <parameter name=""s"" isThis=""true"">
+                    <parameter name=""s"" isThis=""true"" refKind=""None"">
                         <type typeId=""System.String"" typeName=""string"" />
                     </parameter>
                 </parameters>
@@ -585,7 +585,7 @@ Updated Docs
                 <type typeId=""System.Int32"" typeName=""int"" />
             </return>
             <parameters>
-                <parameter name=""o"" >
+                <parameter name=""o""  refKind=""None"">
                     <type typeId=""System.Object"" typeName=""object"" />
                 </parameter>
             </parameters>
@@ -728,7 +728,7 @@ Updated Docs
                     <type typeId=""System.Void"" typeName=""void"" />
                 </return>
                 <parameters>
-                    <parameter name=""i"">
+                    <parameter name=""i"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                     </parameter>
                 </parameters>
@@ -824,7 +824,7 @@ public class ClassInGlobalNamespace
                 <type typeId=""System.Int32"" typeName=""int"" />
             </return>
             <parameters>
-                <parameter name=""i"">
+                <parameter name=""i"" refKind=""None"">
                     <type typeId = ""System.Int32"" typeName = ""i"" />
                 </parameter>
             </parameters>
@@ -878,6 +878,7 @@ namespace DocWorks.Integration.XmlDoc.Tests.TestTypes
                 handler.SetType(data.newDocXml, Path.GetFileName(data.sourcePath));
 
                 var actualSource = File.ReadAllText(data.sourcePath);
+                
                 AssertSourceContains(data.expectedSource, actualSource, !data.compareRaw);
             }
             finally

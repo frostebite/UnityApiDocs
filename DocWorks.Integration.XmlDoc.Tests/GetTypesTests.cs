@@ -249,7 +249,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </return>
                 <parameters>
-                    <parameter name=""i"">
+                    <parameter name=""i"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                     </parameter>
                 </parameters>
@@ -446,7 +446,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                 <get><accessibility>Public</accessibility></get>
                 <set><accessibility>Protected</accessibility></set>
                 <parameters>
-                    <parameter name=""a"">
+                    <parameter name=""a"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                     </parameter>
                 </parameters>
@@ -561,10 +561,10 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <type typeId=""System.Int32"" typeName=""int"" />
 </return>
         <parameters>
-            <parameter name=""classWithOperator"">
+            <parameter name=""classWithOperator"" refKind=""None"">
                 <type typeId=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOperator"" typeName=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOperator"" />
             </parameter>
-            <parameter name=""other"">
+            <parameter name=""other"" refKind=""None"">
                 <type typeId=""System.Int32"" typeName=""int"" />
             </parameter>
         </parameters>
@@ -619,7 +619,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     <type typeId=""System.Void"" typeName=""void"" />
                 </return>
                 <parameters>
-                    <parameter name=""t2"">
+                    <parameter name=""t2"" refKind=""None"">
                         <typeParameter declaringTypeId="""" name=""T2"" />
                     </parameter>
                 </parameters>
@@ -722,7 +722,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Int32"" typeName=""int"" />
         </return>
         <parameters>
-            <parameter name=""s"">
+            <parameter name=""s"" refKind=""None"">
                 <type typeId=""System.String"" typeName=""string"" />
             </parameter>
         </parameters>
@@ -750,7 +750,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""i"" isOptional=""true"" defaultValue=""3"">
+            <parameter name=""i"" isOptional=""true"" defaultValue=""3"" refKind=""None"">
                 <type typeId=""System.Int32"" typeName=""int"" />
             </parameter>
         </parameters>
@@ -767,7 +767,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""s"" isOptional=""true"">
+            <parameter name=""s"" isOptional=""true"" refKind=""None"">
                 <type typeId=""System.String"" typeName=""string"" />
                 <attributes>
                     <attribute typeId=""System.Runtime.InteropServices.OptionalAttribute"" />
@@ -787,7 +787,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""f"" isOptional=""true"" defaultValue=""4"">
+            <parameter name=""f"" isOptional=""true"" defaultValue=""4"" refKind=""None"">
                 <type typeId=""System.Single"" typeName=""float"" />
             </parameter>
         </parameters>
@@ -804,7 +804,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""s"" isOptional=""true"" defaultValue=""default(AStruct)"">
+            <parameter name=""s"" isOptional=""true"" defaultValue=""default(AStruct)"" refKind=""None"">
                 <type typeId=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOptionalParameters.AStruct"" typeName=""DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithOptionalParameters.AStruct"" />
             </parameter>
         </parameters>
@@ -821,7 +821,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
           <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-          <parameter name=""s"" isOptional=""true"" defaultValue=""&lt;&gt;&amp;&quot;"">
+          <parameter name=""s"" isOptional=""true"" defaultValue=""&lt;&gt;&amp;&quot;"" refKind=""None"">
             <type typeId=""System.String"" typeName=""string"" />
           </parameter>
         </parameters>
@@ -847,7 +847,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <type typeId=""System.Int32"" typeName=""int"" />
 </return>
         <parameters>
-            <parameter name=""o"">
+            <parameter name=""o"" refKind=""None"">
                 <type typeId=""System.Object"" typeName=""object"" />
             </parameter>
         </parameters>
@@ -931,7 +931,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     <type typeId=""System.Void"" typeName=""void"" />
                 </return>
                 <parameters>
-                    <parameter name=""i"">
+                    <parameter name=""i"" refKind=""None"">
                         <type typeId=""System.Int32"" typeName=""int"" />
                         <attributes>
                             <attribute typeId=""DocWorks.Integration.XmlDoc.Tests.TestTypes.Attributes.TestPublicAttribute"" />
@@ -1119,7 +1119,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""ints"" isParams=""true"">
+            <parameter name=""ints"" isParams=""true"" refKind=""None"">
                 <type typeId=""System.Int32[]"" typeName=""int[]"">
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </type>
@@ -1147,7 +1147,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""p"">
+            <parameter name=""p"" refKind=""None"">
                 <type typeId=""System.Int32*"" typeName=""int*"">
                     <type typeId=""System.Int32"" typeName=""int"" />
                 </type>
@@ -1170,7 +1170,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""ints"">
+            <parameter name=""ints"" refKind=""None"">
                 <type typeId=""System.Collections.Generic.List`1"" typeName=""System.Collections.Generic.List&lt;int&gt;"">
                     <typeArguments>
                         <type typeId=""System.Int32"" typeName=""int"" />
@@ -1195,7 +1195,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""ints"">
+            <parameter name=""ints"" refKind=""None"">
                 <type typeId=""System.Collections.Generic.List`1[]"" typeName=""System.Collections.Generic.List&lt;int&gt;[]"">
                     <type typeId=""System.Collections.Generic.List`1"" typeName=""System.Collections.Generic.List&lt;int&gt;"">
                         <typeArguments>
@@ -1302,7 +1302,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <type typeId=""System.Void"" typeName=""void"" />
         </return>
         <parameters>
-            <parameter name=""v"" isOptional=""true"" defaultValue=""ExternalEnum.Value"">
+            <parameter name=""v"" isOptional=""true"" defaultValue=""ExternalEnum.Value"" refKind=""None"">
                 <type typeId=""ExternalEnum"" typeName=""ExternalEnum"" />
             </parameter>
         </parameters>
