@@ -121,7 +121,7 @@ namespace DocWorks.Integration.XmlDoc.Extensions
 
         private static string ParameterId(IParameterSymbol p)
         {
-            return $@"{p.RefKind} " + FullyQualifiedName(p.Type, true, NameFormat.NameWithGenericArguments); //Refactor later - if ref kind is none this is not needed
+            return $@"{p.RefKind} " + FullyQualifiedName(p.Type, true, NameFormat.NameWithGenericArguments);
         }
 
         internal static string FullyQualifiedName(this ISymbol t, bool includeNamespace, NameFormat nameFormat)
