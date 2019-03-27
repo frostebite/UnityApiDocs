@@ -177,7 +177,7 @@ namespace DocWorks.Integration.XmlDoc
         {
             var xml = typeSymbol.GetDocumentationCommentXml();
             xml = extraMemberRegEx.Replace(xml, "");
-            //xml = string.Join("\r\n", xml.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Substring(4)));
+            xml = string.Join("\r\n", xml.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Substring(4)));
             //xml = XmlUtility.LegalString(xml);
             //escape end of CDATA tags
             xml = xml.Replace("]]>", "]]]]><![CDATA[>");
@@ -358,7 +358,7 @@ namespace DocWorks.Integration.XmlDoc
 {accessibilityXml}
 {typeXml}";
                     }
-                case SymbolKind.Method: // here is where you fix refs
+                case SymbolKind.Method:
                     {
                         var method = (IMethodSymbol)member;
                         string returnXml = "";
