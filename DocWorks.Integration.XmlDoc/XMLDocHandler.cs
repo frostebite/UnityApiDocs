@@ -531,7 +531,7 @@ namespace DocWorks.Integration.XmlDoc
             {
                 string paramsAttribute = parameter.IsParams ? @" isParams=""true""" : "";
                 string optionalAttribute = parameter.IsOptional ? @" isOptional=""true""" : "";
-                string refAttribute = $@" passByRef='{parameter.RefKind}'"; //if there is no ref kind do not add ref attribute
+                string refAttribute = $@" refKind='{parameter.RefKind}'";
                 string defaultValueAttribute;
                 
                 if (parameter.HasExplicitDefaultValue)
@@ -559,7 +559,6 @@ namespace DocWorks.Integration.XmlDoc
 
                 string parameterTag =
                     $"parameter name=\"{parameter.Name}\"{paramsAttribute}{optionalAttribute}{defaultValueAttribute}{refAttribute}";
-
 
                 string attributesXml = AttributesXml(parameter);
 
