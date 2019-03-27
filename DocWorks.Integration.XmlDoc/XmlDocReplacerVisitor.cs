@@ -211,26 +211,24 @@ namespace DocWorks.Integration.XmlDoc
         {
             SyntaxTriviaList docTrivia = nodeToBeUpdated.GetLeadingTrivia();
 
-            SyntaxTrivia[] initialWhitespace = docTrivia.Where(t => t.IsKind(SyntaxKind.WhitespaceTrivia) || t.IsKind(SyntaxKind.EndOfLineTrivia)).ToArray();
-            int lastNewLineIndex = Array.FindLastIndex(initialWhitespace, t => t.Kind() == SyntaxKind.EndOfLineTrivia);
-            if (lastNewLineIndex >= 0)
-                initialWhitespace = initialWhitespace.Skip(lastNewLineIndex + 1).ToArray();
+            var lastNewlineIndex = docTrivia.ToFullString().LastIndexOf('\n') + docTrivia.FullSpan.Start;
+            SyntaxTrivia[] initialWhitespace = docTrivia.Where(t => t.FullSpan.Start > lastNewlineIndex && t.IsKind(SyntaxKind.WhitespaceTrivia)).ToArray();
+//            int lastNewLineIndex = Array.FindLastIndex(initialWhitespace, t => t.Kind() != SyntaxKind.WhitespaceTrivia);
+//            if (lastNewLineIndex >= 0)
+//                initialWhitespace = initialWhitespace.Skip(lastNewLineIndex + 1).ToArray();
 
             if (nodeToBeUpdated.ContainsDirectives)
             {
                 initialWhitespace = initialWhitespace.Take(1).ToArray();
             }
-
-            var temp4 = initialWhitespace.Select(t => t.ToFullString());
-            string rawWhitespace = string.Join("", temp4);
-
-            var temp1 = docNode.InnerText.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries);
-            var temp2 = temp1.Where(x => !string.IsNullOrWhiteSpace(x));
-            var temp3 = temp2.Select(item => "/// " + item.Trim());
+            string rawWhitespace = string.Join("", initialWhitespace.Select(t => t.ToFullString()));
 
             // break lines (to inject ///) at both CRLF & LF.
-            string comment = string.Join("\r\n" + rawWhitespace.Substring(rawWhitespace.Length / 2), temp3);
-                
+            string comment = string.Join("\r\n" + rawWhitespace, 
+                docNode.InnerText.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(item => "/// " + item));
+
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(comment);
             SyntaxNode xmlDocumentNode = syntaxTree.GetRoot();
 
@@ -250,9 +248,9 @@ namespace DocWorks.Integration.XmlDoc
                 }
             }
 
-            if (shouldUpdate)
+            if (shouldUpdate && !string.IsNullOrEmpty(comment))
             {
-                newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia());
+                newTrivia = newTrivia.AddRange(xmlDocumentNode.GetLeadingTrivia().Add(SyntaxFactory.CarriageReturnLineFeed).AddRange(initialWhitespace));
             }
 
             return nodeToBeUpdated.WithLeadingTrivia(newTrivia);
