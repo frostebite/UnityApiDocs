@@ -1268,7 +1268,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
                     expectedXml = @"<?xml version=""1.0"" encoding=""utf-16"" standalone=""yes""?>
 <doc version=""3"">
     <member name=""ClassWithMalformedXml"" type=""Class"" namespace=""DocWorks.Integration.XmlDoc.Tests.TestTypes"">
-        <xmldoc><![CDATA[<!-- Badly formed XML comment ignored for member ""T:DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithMalformedXml"" -->]]></xmldoc>
+        <xmldoc><![CDATA[]]></xmldoc>
     </member>
 </doc>"
                 }).SetName("Malformed_Xml");
