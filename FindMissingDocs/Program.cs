@@ -32,8 +32,8 @@ namespace DocWorks.Integration.FindMissingDocs
             OptionsParser.Prepare(args, typeof(Program).Assembly);
 
             Console.WriteLine("API missing docs:");
-            FindMissingDocs(DriverOptions.RootPath, 
-                DriverOptions.ExcludedPaths, 
+            FindMissingDocs(DriverOptions.RootPath,
+                DriverOptions.ExcludedPaths,
                 DriverOptions.Defines,
                 Console.WriteLine);
         }
@@ -44,6 +44,7 @@ namespace DocWorks.Integration.FindMissingDocs
                 rootPath ?? ".",
                 excludedPaths ?? new string[0],
                 defines ?? new string[0],
+                new string[0],
                 new string[0]));
 
             string typesXml = handler.GetTypesXml();

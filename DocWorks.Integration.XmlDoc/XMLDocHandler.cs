@@ -20,13 +20,15 @@ namespace DocWorks.Integration.XmlDoc
         public string RootPath { get; }
         public IEnumerable<string> ExcludedPaths { get; }
         public IEnumerable<string> ReferencedAssemblyPaths { get; }
+        public IEnumerable<string> CSFilePaths { get; }
 
-        public CompilationParameters(string rootPath, IEnumerable<string> excludedPaths, IEnumerable<string> definedSymbols, IEnumerable<string> referencedAssemblyPaths)
+        public CompilationParameters(string rootPath, IEnumerable<string> excludedPaths, IEnumerable<string> definedSymbols, IEnumerable<string> referencedAssemblyPaths, IEnumerable<string> csFilePaths)
         {
             ExcludedPaths = (excludedPaths ?? new string[0]).Select(Path.GetFullPath).ToArray();
             DefinedSymbols = definedSymbols ?? throw new ArgumentNullException(nameof(definedSymbols));
             RootPath = rootPath ?? throw new ArgumentNullException(nameof(rootPath));
             ReferencedAssemblyPaths = referencedAssemblyPaths ?? throw new ArgumentNullException(nameof(referencedAssemblyPaths));
+            CSFilePaths = csFilePaths ?? throw new ArgumentNullException(nameof(csFilePaths));
         }
     }
 
@@ -35,17 +37,10 @@ namespace DocWorks.Integration.XmlDoc
         private CompilationParameters compilationParameters;
         private CSharpCompilation csharpCompilation;
         private Dictionary<string, SyntaxTree> treesForPaths;
-        private List<string> csFilePaths;
 
         public XMLDocHandler(CompilationParameters compilationParameters)
         {
             this.compilationParameters = compilationParameters;
-        }
-
-        public XMLDocHandler(CompilationParameters compilationParameters, List<string> csFilePaths)
-        {
-            this.compilationParameters = compilationParameters;
-            this.csFilePaths = csFilePaths;
         }
 
         public string GetTypesXml()
@@ -219,7 +214,7 @@ namespace DocWorks.Integration.XmlDoc
                 SourceCodeKind.Regular, compilationParameters.DefinedSymbols);
 
             var csFilePaths = GetCSFilePaths();
-            
+
             var syntaxTrees = csFilePaths.Select(
                 p =>
                 {
@@ -616,7 +611,7 @@ namespace DocWorks.Integration.XmlDoc
 
         private IEnumerable<string> GetCSFilePaths()
         {
-            return csFilePaths != null ? GetFullPathsFromRelativePath(csFilePaths.ToArray()) : GetFullPathsFromDirectory(Path.GetFullPath(compilationParameters.RootPath));
+            return (compilationParameters.CSFilePaths != null && compilationParameters.CSFilePaths.Count() > 0) ? GetFullPathsFromRelativePath(compilationParameters.CSFilePaths.ToArray()) : GetFullPathsFromDirectory(Path.GetFullPath(compilationParameters.RootPath));
         }
 
         private IEnumerable<string> GetFullPathsFromRelativePath(string[] relativeFilePaths)
