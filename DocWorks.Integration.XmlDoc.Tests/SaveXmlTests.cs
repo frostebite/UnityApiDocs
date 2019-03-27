@@ -276,40 +276,6 @@ Updated Docs
                 {
                     newDocXml = @"<?xml version=""1.0"" encoding=""utf-16"" standalone=""yes""?>
 <doc version=""3"">
-    <member name=""ClassWithMultipleFieldsOnDeclaration"" type=""Class"" namespace=""DocWorks.Integration.XmlDoc.Tests.TestTypes"" inherits=""Object"">
-        <member name=""value2"" type=""Field"">
-            <signature>
-                <accessibility>Public</accessibility>
-                <type typeId=""System.Object"" typeName=""System.Object"" />
-            </signature>
-            <xmldoc>
-                <![CDATA[<summary>New Docs</summary>]]>
-            </xmldoc>
-        </member>
-    </member>
-</doc>",
-                    expectedSource = @"namespace DocWorks.Integration.XmlDoc.Tests.TestTypes
-{
-    public class ClassWithMultipleFieldsOnDeclaration
-    {
-        /// <summary>
-        /// Value field 1
-        /// </summary>
-        public System.Object value1,
-
-            /// <summary>New Docs</summary>
-            value2;
-    }
-}
-",
-                    sourcePath = "TestTypes/ClassWithMultipleFieldsOnDeclaration.cs"
-                }).SetName("Update_Second_Field_On_Declaration");
-
-            yield return new TestCaseData(
-                new UpdateTestData
-                {
-                    newDocXml = @"<?xml version=""1.0"" encoding=""utf-16"" standalone=""yes""?>
-<doc version=""3"">
     <member name=""ClassWithField"" type=""Class"" namespace=""DocWorks.Integration.XmlDoc.Tests.TestTypes"" inherits=""Object"">
         <xmldoc>
             <![CDATA[<summary>New ClassWithField Docs</summary>]]>
