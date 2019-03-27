@@ -775,7 +775,7 @@ public class ClassInGlobalNamespace
 <doc version=""3"">
     <member name=""ClassWithProtectedMethod"" type=""Class"" namespace=""DocWorks.Integration.XmlDoc.Tests.TestTypes"">
         <xmldoc><![CDATA[<summary>
-    New class docs
+New class docs
 </summary>]]></xmldoc>
         <member name=""ProtectedMethod"" type=""Method"">
             <signature>
@@ -787,7 +787,7 @@ public class ClassInGlobalNamespace
                 </parameters>
             </signature>
             <xmldoc><![CDATA[<summary>
-    New method docs
+New method docs
 </summary>]]></xmldoc>
         </member>
     </member>
