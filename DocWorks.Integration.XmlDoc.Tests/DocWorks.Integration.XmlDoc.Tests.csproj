@@ -214,6 +214,10 @@
     <Compile Update="TestTypes\DuplicateClass.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+  
+    <Compile Update="TestTypes\ClassWithRefFunction.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Microsoft.CodeAnalysis;
 
 namespace DocWorks.Integration.XmlDoc.Tests
 {
@@ -247,7 +248,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Int32"" typeName=""int"" />
+                    <type typeId=""System.Int32"" typeName=""int"" refKind=""None"" />
                 </return>
                 <parameters>
                     <parameter name=""i"">
@@ -265,7 +266,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Protected</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters>
                 </parameters>
@@ -278,7 +279,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Private</accessibility>
                 <return>
-                    <type typeId=""System.Collections.IEnumerator"" typeName=""System.Collections.IEnumerator"" />
+                    <type typeId=""System.Collections.IEnumerator"" typeName=""System.Collections.IEnumerator"" refKind=""None"" />
                 </return>
                 <parameters></parameters>
             </signature>
@@ -293,7 +294,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Object"" typeName=""object"" />
+                    <type typeId=""System.Object"" typeName=""object"" refKind=""None"" />
                 </return>
                 <parameters></parameters>
             </signature>
@@ -386,7 +387,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters></parameters>
             </signature>
@@ -559,7 +560,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-    <type typeId=""System.Int32"" typeName=""int"" />
+    <type typeId=""System.Int32"" typeName=""int"" refKind=""None"" />
 </return>
         <parameters>
             <parameter name=""classWithOperator"">
@@ -617,7 +618,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters>
                     <parameter name=""t2"">
@@ -645,7 +646,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters>
                 </parameters>
@@ -674,7 +675,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters></parameters>
                 <typeParameters>
@@ -692,7 +693,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters></parameters>
             </signature>
@@ -720,7 +721,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Int32"" typeName=""int"" />
+            <type typeId=""System.Int32"" typeName=""int"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""s"">
@@ -748,7 +749,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""i"" isOptional=""true"" defaultValue=""3"">
@@ -765,7 +766,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""s"" isOptional=""true"">
@@ -785,7 +786,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""f"" isOptional=""true"" defaultValue=""4"">
@@ -802,7 +803,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""s"" isOptional=""true"" defaultValue=""default(AStruct)"">
@@ -819,7 +820,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
       <signature>
         <accessibility>Public</accessibility>
         <return>
-          <type typeId=""System.Void"" typeName=""void"" />
+          <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
           <parameter name=""s"" isOptional=""true"" defaultValue=""&lt;&gt;&amp;&quot;"">
@@ -845,7 +846,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-    <type typeId=""System.Int32"" typeName=""int"" />
+    <type typeId=""System.Int32"" typeName=""int"" refKind=""None"" />
 </return>
         <parameters>
             <parameter name=""o"">
@@ -870,7 +871,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters></parameters>
     </signature>
@@ -929,7 +930,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Void"" typeName=""void"" />
+                    <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
                 </return>
                 <parameters>
                     <parameter name=""i"">
@@ -948,7 +949,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <signature>
                 <accessibility>Public</accessibility>
                 <return>
-                    <type typeId=""System.Int32"" typeName=""int"" />
+                    <type typeId=""System.Int32"" typeName=""int"" refKind=""None"" />
                     <attributes>
                         <attribute typeId=""DocWorks.Integration.XmlDoc.Tests.TestTypes.Attributes.TestPublicAttribute"" />
                     </attributes>
@@ -1024,7 +1025,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
       <signature>
         <accessibility>Public</accessibility>
         <return>
-          <type typeId=""System.Void"" typeName=""void"" />
+          <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters></parameters>
       </signature>
@@ -1092,7 +1093,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
             <accessibility>Public
             </accessibility>
             <return>
-                <type typeId=""System.Void"" typeName=""void"" />
+                <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
             </return>
             <parameters>
             </parameters>
@@ -1117,7 +1118,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""ints"" isParams=""true"">
@@ -1145,7 +1146,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""p"">
@@ -1168,7 +1169,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""ints"">
@@ -1193,7 +1194,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""ints"">
@@ -1300,7 +1301,7 @@ namespace DocWorks.Integration.XmlDoc.Tests
     <signature>
         <accessibility>Public</accessibility>
         <return>
-            <type typeId=""System.Void"" typeName=""void"" />
+            <type typeId=""System.Void"" typeName=""void"" refKind=""None"" />
         </return>
         <parameters>
             <parameter name=""v"" isOptional=""true"" defaultValue=""ExternalEnum.Value"">
@@ -1351,6 +1352,18 @@ namespace DocWorks.Integration.XmlDoc.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(actualXml);
             int nodeCount = doc.DocumentElement.SelectNodes("member/member").Count;
+            Assert.That(nodeCount, Is.EqualTo(1));
+        }
+        
+        [Test]
+        public void GetType_ClassWithFunctionThatReturnsByRef_AttributeCorrectlySetup()
+        {
+            CompilationParameters compilationParameters = new CompilationParameters(AppContext.BaseDirectory, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
+            XMLDocHandler handler = new XMLDocHandler(compilationParameters);
+            string actualXml = handler.GetTypeDocumentation("DocWorks.Integration.XmlDoc.Tests.TestTypes.ClassWithRefFunction", "TestTypes/ClassWithRefFunction.cs");
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(actualXml);
+            int nodeCount = doc.ChildNodes[1].ChildNodes[0].ChildNodes[2].SelectNodes($"signature/return/type[@refKind='{RefKind.Ref}']").Count;
             Assert.That(nodeCount, Is.EqualTo(1));
         }
 

@@ -368,11 +368,12 @@ namespace DocWorks.Integration.XmlDoc
                     {
                         var method = (IMethodSymbol)member;
                         string returnXml = "";
+                        string typeTag = TypeReferenceXml(method.ReturnType);
                         if (method.Name != ".ctor")
                         {
                             var returnTypeAttributes = method.GetReturnTypeAttributes();
                             returnXml = $@"<return>
-    {TypeReferenceXml(method.ReturnType)}
+    {typeTag.Insert(typeTag.LastIndexOf("/>"), $" refKind=\"{method.RefKind}\" ")}
     {AttributesXml(returnTypeAttributes)}
 </return>";
                         }
@@ -442,8 +443,7 @@ namespace DocWorks.Integration.XmlDoc
             {
                 return TypeParameterXml(sourceTypeParameterSymbol, includeMetaInfo, true);
             }
-            var typeTagAttributes =
-                $"typeId=\"{typeSymbol.Id()}\" typeName=\"{XmlUtility.EscapeString(typeSymbol.ToDisplayString())}\"";
+            var typeTagAttributes = $"typeId=\"{typeSymbol.Id()}\" typeName=\"{XmlUtility.EscapeString(typeSymbol.ToDisplayString())}\"";
 
             if (typeSymbol is IArrayTypeSymbol)
             {
